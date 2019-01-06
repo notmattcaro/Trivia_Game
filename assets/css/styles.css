@@ -1,0 +1,41 @@
+html {
+    height: 100%;
+    width: 100%;
+}
+body {
+    height: 100%;
+    width: 100%;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+/* initial set up above */
+/* ---------------------------------------------------------------------------- */
+
+#mainContainer {
+    background-color: palevioletred;
+    padding: 20px;
+    border-radius: 5px;
+    height: 70%;
+    width: 45%;
+}
+.center {
+    display: flex;
+    justify-content: center; 
+}
+#bottomCont {
+    display: flex;
+    height: 50%;
+    justify-content: center;
+    align-items: flex-end;
+
+}
+.hovers:hover {
+    border: 20px;
+    background-color: aquamarine;   
+    border-radius: 2px;
+}
+img {
+    height: 60%;
+    width: 60%;
+}
