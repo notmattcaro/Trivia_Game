@@ -152,9 +152,13 @@ $('#startButton').on('click', function() {
         var rightWrong = $('#rightWrong');
         var timeCount = $('#timeCount');
 
-        var secondsDown = 20;
+        var secondsDown = 10;
         var isClicked;
         var questionCount = 0;
+        var countDown;
+        var countDown2;
+        var countDown3;
+        var finished = false;
 
 
 //Functions that get other functions started
@@ -166,6 +170,10 @@ $('#startButton').on('click', function() {
             $('#question4').text(questions[x].fourth);
             $('#image').text('');
             isClicked = false;
+            finished = false;
+            clearInterval(countDown);
+            clearTimeout(countDown2);
+            clearTimeout(countDown3);
         };
         
         function triviaEmpty() { // works
@@ -190,239 +198,263 @@ $('#startButton').on('click', function() {
             image.empty();
         };
 //Function for 20 second countdown 
-        function thirtyCount() {
+        function thirtyCount(x, y) {
             countDown = setInterval(function() {
                 if (secondsDown == 0 || isClicked == true) {
+                    clearInterval(countDown);
                     secondsDown = secondsDown;
                     timeCount.text(" " + secondsDown);
-                    clearInterval(countDown);
                 } else {
                     secondsDown = secondsDown - 1;
                     console.log(secondsDown);
                     timeCount.text(" " + secondsDown);
-                    if (secondsDown == 0) {
+                    if (secondsDown == 0 || isClicked == true) { 
                         clearInterval(countDown);
                     }
                 }
             }, 1000);
-            secondsDown = 20;
-            setTimeout(function() {
+
+            secondsDown = 10;
+            
+            countDown2 = setTimeout(function() {
                 if (isClicked == true) {
-                    clearTimeout();
-                    isClicked = false;
+                    clearTimeout(countDown2);
+                    playAll();
                 } else if (isClicked == false) {
+                    clearTimeout(countDown2);
                     unansweredCounter++;
-                    console.log(unansweredCounter + ' thirty count');
+                    console.log(unansweredCounter + ' unanswered');
                     triviaEmpty();
-                    showAnswer(x,y);
-                    setTimeout(function() {
+                    showAnswer(x, y);// ================================================== arguments
+                    countDown3 = setTimeout(function() {
+                        clearTimeout(countDown3);
                         removeAnswer();
                         questionCount++; //==========================================QC
-                        console.log(questionCount);
-                        questionTrivia1();
-                        questionTrivia2();
-                        clearTimeout();
+                        console.log(questionCount + " questionCount");
+                        finished = true;
+                        playAll();
                     }, 3 * 1000);
                 }
-                clearTimeout();
-            }, 20 * 1000);
+            }, 10 * 1000);
         };
 //Function for when user selects right answer
-        function rightChoice(a, x, y) {
-            a.on('click', function() {
+        function Choice(a, b, c, d, x, y) {
+            a.on('click', function right() {
                 isClicked = true;
+                clearInterval(countDown);
+                clearTimeout(countDown2);
+                clearTimeout(countDown3);
                 rightCounter++;
                 console.log(rightCounter + " right");
-                finish = true;
                 triviaEmpty();
                 rightWrong.text('You\'re right, but you are still an idiot.');
                 setTimeout(function(){
-                    showAnswer(x, y);
-                    setTimeout(function() {
-                        removeAnswer();
-                        questionCount++; //======================================QC
-                        console.log(questionCount);
-                        questionTrivia1();
-                        questionTrivia2();
-                        clearTimeout();
-                    }, 3 * 1000);
                     clearTimeout();
+                    showAnswer(x, y);
                 }, 2 * 1000);
+                setTimeout(function() {
+                    clearTimeout();
+                    removeAnswer();
+                    questionCount++; //======================================QC
+                    console.log(questionCount + "questionCount");
+                    finished = true;
+                    if (finished == true) {
+                        a.off('click', right);
+                        playAll();
+                    }
+                }, 3 * 1000);
             });
-        };
-
-//Function for when user selects wrong answer
-        function wrongChoice(b, c, d, x, y) {
-            b.on('click', function() { 
+            b.on('click', function wrong1() { 
                 isClicked = true;
+                clearInterval(countDown);
+                clearTimeout(countDown2);
+                clearTimeout(countDown3);
                 wrongCounter++;
                 console.log(wrongCounter + " wrong");
-                finish = true;
                 triviaEmpty();
                 rightWrong.text('Congrats you\'re wrong!');
                 setTimeout(function(){
-                    showAnswer(x, y);
-                    setTimeout(function() {
-                        removeAnswer();
-                        questionCount++; //========================================QC
-                        console.log(questionCount);
-                        questionTrivia1();
-                        questionTrivia2();
-                        clearTimeout();
-                    }, 3000);
                     clearTimeout();
+                    showAnswer(x, y);
                 }, 2000);
+                setTimeout(function() {
+                    clearTimeout();
+                    removeAnswer();
+                    questionCount++; //========================================QC
+                    console.log(questionCount + "questionCount");
+                    finished = true;
+                    if (finished == true) {
+                        b.off('click', wrong1)
+                        playAll();
+                    }
+                }, 3000);
             });
-            c.on('click', function() { 
+            c.on('click', function wrong2() { 
                 isClicked = true;
+                clearInterval(countDown);
+                clearTimeout(countDown2);
+                clearTimeout(countDown3);
                 wrongCounter++;
                 console.log(wrongCounter + " wrong");
-                finish = true;
                 triviaEmpty();
                 rightWrong.text('Wrong, come on this is simple Morty!!');
                 setTimeout(function(){
-                    showAnswer(x, y);
-                    setTimeout(function() {
-                        removeAnswer();
-                        questionCount++; //========================================QC
-                        console.log(questionCount);
-                        questionTrivia1();
-                        questionTrivia2();
-                        clearTimeout();
-                    }, 3000);
                     clearTimeout();
+                    showAnswer(x, y);
                 }, 2000);
+                setTimeout(function() {
+                    clearTimeout();
+                    removeAnswer();
+                    questionCount++; //========================================QC
+                    console.log(questionCount + "questionCount");
+                    finished = true;
+                    if (finished == true) {
+                        c.off('click', wrong2);
+                        playAll();
+                    }
+                }, 3000);
             });
-            d.on('click', function() { 
+            d.on('click', function wrong3() { 
                 isClicked = true;
+                clearInterval(countDown);
+                clearTimeout(countDown2);
+                clearTimeout(countDown3);
                 wrongCounter++;
                 console.log(wrongCounter + " wrong");
-                finish = true;
                 triviaEmpty();
                 rightWrong.text('Ohh geez, that\'s wrong');
                 setTimeout(function(){
-                    showAnswer(x, y);
-                    setTimeout(function() {
-                        removeAnswer();
-                        questionCount++; //========================================QC
-                        console.log(questionCount);
-                        questionTrivia1();
-                        questionTrivia2();
-                        clearTimeout();
-                    }, 3000);
                     clearTimeout();
+                    showAnswer(x, y);
                 }, 2000);
+                setTimeout(function() {
+                    clearTimeout();
+                    removeAnswer();
+                    questionCount++; //========================================QC
+                    console.log(questionCount + "questionCount");
+                    finished = true;
+                    if (finished == true) {
+                        d.off('click', wrong3)
+                        playAll();
+                    }
+                }, 3000);
             });
         };
 
-        // var triviaPlay = [
-        //     {
-        //         play: function() {
-        function questionTrivia0() {
-            if (questionCount == 0) {
+        var triviaPlay = [
+            {
+                play: function() {
                     triviaPlacer(0);
-                    rightChoice(four,'Pirates of the Pancreas', '<img src="assets/images/piratesOfTheP.jpg">'); 
-                    wrongChoice(one, two, three,'Pirates of the Pancreas', '<img src="assets/images/piratesOfTheP.jpg">');
-                    thirtyCount();
-            } else {
-                return questionCount;
-            }
-        }
-        //             console.log("test 1");
-        //         }
-        //     },  
-        //     { 
-        //         play: function() {
-        function questionTrivia1() {
-            if (questionCount == 1) {
+                    thirtyCount('Pirates of the Pancreas', '<img src="assets/images/piratesOfTheP.jpg">');
+                    Choice(four, one, two, three,'Pirates of the Pancreas', '<img src="assets/images/piratesOfTheP.jpg">');
+                }
+            },  
+            { 
+                play: function() {
                     triviaPlacer(1);
-                    rightChoice(one,'A Clean Slate', '<img src="assets/images/cleanStart.jpg">');
-                    wrongChoice(two, three, four,'A Clean Slate', '<img src="assets/images/cleanStart.jpg">');
-                    thirtyCount();
-            } else {
-                return questionCount;
+                    thirtyCount('A Clean Slate', '<img src="assets/images/cleanStart.jpg">');
+                    Choice(one, two, three, four,'A Clean Slate', '<img src="assets/images/cleanStart.jpg">');
             }
-        }
-        //             console.log("test 2");
-        //         }
-        //     },
-            // {    
-            //     play: function() {
-        function questionTrivia2() {
-            if (questionCount == 2) {
+            },
+            {    
+                play: function() {
                     triviaPlacer(2);
-                    rightChoice(two,'I\'m in great pain', '<img src="assets/images/greatPain.jpg">');
-                    wrongChoice(one, three, four,'I\'m in great pain', '<img src="assets/images/greatPain.jpg">');
-                    thirtyCount();
-            } else {
-                return questionCount;
+                    thirtyCount('I\'m in great pain', '<img src="assets/images/greatPain.jpg">');
+                    Choice(two, one, three, four,'I\'m in great pain', '<img src="assets/images/greatPain.jpg">');
+                }
+            },
+            { 
+
+                play: function() {
+                    triviaPlacer(3);
+                    thirtyCount('Jessica', '<img src="assets/images/jessica.jpg">');
+                    Choice(four, one, two, three,'Jessica', '<img src="assets/images/jessica.jpg">');
+                }
+            },
+            {   
+                play: function() {     
+                    triviaPlacer(4);
+                    thirtyCount('Bill', '<img src="assets/images/bill.jpg">');
+                    Choice(one, two, three, four,'Bill', '<img src="assets/images/bill.jpg">');
+
+                }
+            },      
+            { 
+                play: function() {
+                    triviaPlacer(5);
+                    thirtyCount('Scary Brandon', '<img src="assets/images/scaryBrandon.jpg">');
+                    Choice(two, one, three, four,'Scary Brandon', '<img src="assets/images/scaryBrandon.jpg">');
+                }
+            },
+            {   
+                play: function() {     
+                    triviaPlacer(6);
+                    thirtyCount('Dale', '<img src="assets/images/dale.jpg">');
+                    Choice(four, one, two, three,'Dale', '<img src="assets/images/dale.jpg">');
+                }
+            },      
+            { 
+                play: function() {
+                    triviaPlacer(7);
+                    thirtyCount('Tic Tacs', '<img src="assets/images/ticTacs.jpg">');
+                    Choice(one, two, three, four,'Tic Tacs', '<img src="assets/images/ticTacs.jpg">');
+                }
+            },
+            {  
+                play: function() {   
+                    triviaPlacer(8);
+                    thirtyCount('Confetti Cannon', '<img src="assets/images/confetti.jpg">');
+                    Choice(two, one, three, four,'Confetti Cannon', '<img src="assets/images/confetti.jpg">');
+                }
+            },
+            { 
+                play: function() {
+                    triviaPlacer(9);
+                    thirtyCount('Mr. Jellybean', '<img src="assets/images/mrJelly.jpg">');
+                    Choice(four, one, two, three,'Mr. Jellybean', '<img src="assets/images/mrJelly.jpg">');
+                }
+            }
+        ];
+        // for (var counter = 0; counter < triviaPlay.length; counter++) {
+            triviaPlay[0].play();
+        function playAll() {
+            if (questionCount == 1) {
+            questionCount++;
+            triviaPlay[1].play();
+            }
+            if (questionCount == 3) {
+            questionCount++;
+            triviaPlay[2].play();
+            }
+            if (questionCount == 5) {
+            questionCount++;
+            triviaPlay[3].play();
+            }
+            if (questionCount == 7) {
+            questionCount++;
+            triviaPlay[4].play();
+            }
+            if (questionCount == 9) {
+            questionCount++;
+            triviaPlay[5].play();
+            }
+            if (questionCount == 11) {
+            questionCount++;
+            triviaPlay[6].play();
+            }
+            if (questionCount == 13) {
+            questionCount++;
+            triviaPlay[7].play();
+            }
+            if (questionCount == 15) {
+            questionCount++;
+            triviaPlay[8].play();
+            }
+            if (questionCount == 17) {
+            questionCount++;
+            triviaPlay[9].play();
             }
         }
-        questionTrivia0();
-
-            //     }
-            // },
-            // { 
-
-            //     play: function() {
-            //         triviaPlacer(3);
-            //         rightChoice(four,'Jessica', '<img src="assets/images/jessica.jpg">');
-            //         wrongChoice(one, two, three,'Jessica', '<img src="assets/images/jessica.jpg">');
-            //         thirtyCount();
-            //     }
-            // },
-            // {   
-            //     play: function() {     
-            //         triviaPlacer(4);
-            //         rightChoice(one,'Bill', '<img src="assets/images/bill.jpg">');
-            //         wrongChoice(two, three, four,'Bill', '<img src="assets/images/bill.jpg">');
-            //         thirtyCount();
-            //     }
-            // },      
-            // { 
-            //     play: function() {
-            //         triviaPlacer(5);
-            //         rightChoice(two,'Scary Brandon', '<img src="assets/images/scaryBrandon.jpg">');
-            //         wrongChoice(one, three, four,'Scary Brandon', '<img src="assets/images/scaryBrandon.jpg">');
-            //         thirtyCount();
-            //     }
-            // },
-            // {   
-            //     play: function() {     
-            //         triviaPlacer(6);
-            //         rightChoice(four,'Dale', '<img src="assets/images/dale.jpg">');
-            //         wrongChoice(one, two, three,'Dale', '<img src="assets/images/dale.jpg">');
-            //         thirtyCount();
-            //     }
-            // },      
-            // { 
-            //     play: function() {
-            //         triviaPlacer(7);
-            //         rightChoice(one,'Tic Tacs', '<img src="assets/images/ticTacs.jpg">');
-            //         wrongChoice(two, three, four,'Tic Tacs', '<img src="assets/images/ticTacs.jpg">');
-            //         thirtyCount();
-            //     }
-            // },
-            // {  
-            //     play: function() {   
-            //         triviaPlacer(8);
-            //         rightChoice(two,'Confetti Cannon', '<img src="assets/images/confetti.jpg">');
-            //         wrongChoice(one, three, four,'Confetti Cannon', '<img src="assets/images/confetti.jpg">');
-            //         thirtyCount();
-            //     }
-            // },
-            // { 
-            //     play: function() {
-            //         triviaPlacer(9);
-            //         rightChoice(four,'Mr. Jellybean', '<img src="assets/images/mrJelly.jpg">');
-            //         wrongChoice(one, two, three,'Mr. Jellybean', '<img src="assets/images/mrJelly.jpg">');
-            //         thirtyCount();
-            //     }
-            // }
-        // ];
-
-        // for (var counter = 0; counter < triviaPlay.length; counter++) {
-        //     triviaPlay[counter].play();
         // }
 
 
